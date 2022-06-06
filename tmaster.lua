@@ -71,10 +71,10 @@ function main()
         turtle.placeUp()
         unloadTurtles('up', 'front')
         turtle.select(emptyContainerSlot)
-        assert(#turtle.getItemDetail() == 0 or turtle.getItemDetail.name == TURTLE_CONTAINER)
+        assert(turtle.getItemDetail() == nil or turtle.getItemDetail.name == TURTLE_CONTAINER)
         turtle.digUp()
     end
 
 end
-s
+
 main()
