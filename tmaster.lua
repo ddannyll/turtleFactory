@@ -51,7 +51,6 @@ end
 function unloadTurtles(storageDirection, placeDirection)
     assert(PLACE_DIRS[storageDirection], "invalid storage direction")
     assert(PLACE_DIRS[placeDirection], "invalid place direction")
-    assert(not turtle.inspect(), "cannot place turtle")
 
     selectEmpty()
 
