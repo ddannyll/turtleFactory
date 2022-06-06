@@ -1,7 +1,7 @@
 -- CONSTANTS
 local DISK_DRIVE = 'computercraft:disk_drive'
 local DISK = 'computercraft:disk'
-local TURTLE_CONTAINER = 'storagedrawer:oak_half_drawers_4'
+local TURTLE_CONTAINER = 'storagedrawers:oak_half_drawers_4'
 local PLACE_DIRECTIONS = {up=true, down=true, front=true}
 
 function getItemSlotList(name)
