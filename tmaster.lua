@@ -2,7 +2,21 @@
 local DISK_DRIVE = 'computercraft:disk_drive'
 local DISK = 'computercraft:disk'
 local TURTLE_CONTAINER = 'storagedrawers:oak_half_drawers_4'
-local PLACE_DIRECTIONS = {up=true, down=true, front=true}
+local PLACE_DIRS = {up=true, down=true, front=true}
+local PLACE_IN_DIR = {up=turtle.placeUp, down=turtle.placeDown, front=turtle.place}
+local SUCK_IN_DIR = {up=turtle.suckUp, down=turtle.suckDown, front=turtle.suck}
+
+
+function selectEmpty()
+    for i =1,16,1 do
+        local item = turtle.getItemDetail(i)
+        if item == nil then
+            turtle.select()
+            return true
+        end
+        return false
+    end
+end
 
 function getItemSlotList(name)
     local list = {}
@@ -26,26 +40,37 @@ function getItemSlot(name)
 end
 
 function placeItem(name, direction)
-    assert(PLACE_DIRECTIONS[direction], "Invalid direction")
+    assert(PLACE_DIRS[direction], "Invalid direction")
     local slot = getItemSlot(name)
     if slot == nil then return nil end
     turtle.select(slot)
 
-    local success
-    if direction == 'up' then
-        success = turtle.placeUp()
-    elseif direction == 'down' then
-        success = turtle.placeDown()
-    elseif direction =='front' then
-        success = turtle.place()
+    return PLACE_IN_DIR[direction]()
+end
+
+function unloadTurtles(storageDirection, placeDirection)
+    assert(PLACE_DIRS[storageDirection], "invalid storage direction")
+    assert(PLACE_DIRS[placeDirection], "invalid place direction")
+    assert(not turtle.inspect(), "cannot place turtle")
+
+    selectEmpty()
+
+    while SUCK_IN_DIR[storageDirection]() do
+        while not PLACE_IN_DIR[placeDirection]() do
+            sleep(2)
+            print("waiting for free block space")
+        end
     end
-    return success
+
 end
 
 function main()
     local turtleContainers = getItemSlotList(TURTLE_CONTAINER)
     for _, v in pairs(turtleContainers) do
-        print(v)
+        turtle.select(v)
+        turtle.placeUp()
+        unloadTurtles('up', 'front')
+        turtle.digUp()
     end
 
 end
