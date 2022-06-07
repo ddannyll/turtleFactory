@@ -6,6 +6,7 @@ local PLACE_DIRS = {up=true, down=true, front=true}
 local PLACE_IN_DIR = {up=turtle.placeUp, down=turtle.placeDown, front=turtle.place}
 local SUCK_IN_DIR = {up=turtle.suckUp, down=turtle.suckDown, front=turtle.suck}
 
+Master = {}
 
 function selectEmpty()
     for i =1,16,1 do
@@ -72,7 +73,6 @@ function main()
         turtle.placeUp()
         unloadTurtles('up', 'front')
         turtle.select(emptyContainerSlot)
-        assert(turtle.getItemDetail() == nil or turtle.getItemDetail.name == TURTLE_CONTAINER)
         turtle.digUp()
     end
 
