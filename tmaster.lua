@@ -65,7 +65,8 @@ end
 
 function main()
     local turtleContainers = getItemSlotList(TURTLE_CONTAINER)
-    local emptyContainerSlot = turtleContainers[1]
+    -- Assume empty slot will be the slot of the first drawer (turtle places it)
+    local emptyContainerSlot = turtleContainers[1] 
     for _, v in pairs(turtleContainers) do
         turtle.select(v)
         turtle.placeUp()
