@@ -1,97 +1,71 @@
--------------------------------------------------------------------------------
--- HELPERS
--------------------------------------------------------------------------------
-
-function dump(o)
-    if type(o) == 'table' then
-       local s = '{ '
-       for k,v in pairs(o) do
-          if type(k) ~= 'number' then k = '"'..k..'"' end
-          s = s .. '['..k..'] = ' .. dump(v) .. ','
-       end
-       return s .. '} '
-    else
-       return tostring(o)
-    end
- end
-
--------------------------------------------------------------------------------
--- POSITION OBJECT
--------------------------------------------------------------------------------
-Position = {}
-Position.prototype = {
-    setX = nil,
-    setY = nil,
-    setZ = nil,
-    setDirection = nil,
-    getPos = nil
-}
-Position.metatable = {__index = Position.prototype}
-
-function Position.new(x, y, z, direction)
-    local DIRECTIONS = {N=true, E=true, S=true, W=true}
-
-    local instance = setmetatable({}, Position.metatable)
-    
-    -- Private Variables
-    local pX
-    local pY
-    local pZ
-    local pDirection
-
-    -- Public Functions
-    function instance:setX(v)
-        assert (type(v) == "number")
-        pX = v
-        print(pX)
-    end
-    function instance:setY(v)
-        assert (type(v) == 'number')
-        pY = v
-    end
-    function instance:setZ(v)
-        assert (type(v) == 'number')
-        pZ = v
-    end
-    function instance:setDirection(v)
-        assert(type(v) == 'string' and DIRECTIONS[string.upper(string.sub(v,1,1))], 'Invalid Direction')
-        pDirection = string.upper(string.sub(v,1,1))
-        print(pDirection)
-    end
-    function instance:getPos()
-        return {x=pX, y=pY, z=pZ, direction=pDirection}
-    end
-    
-    
-
-    -- Initialise private variables
-    instance:setX(x)
-    instance:setY(y)
-    instance:setZ(z)
-    instance:setDirection(direction)
-
-    return instance
-end
-
-p1 = Position.new(1,1,1,'n')
+require('position.lua')
 
 -------------------------------------------------------------------------------
 -- TURTLE OBJECT
 -------------------------------------------------------------------------------
 Turtle = {}
-Turtle.prototype = {
-    forward = nil,
-    back = nil,
-    up = nil,
-    down = nil,
-    right = nil,
-    left = nil,
-    gotoPos = nil,
-    getPos = nil,
-    getFuel = nil,
-    setFuelLocation = nil,
-    getfuelLocation = nil,
-    refuel = nil,
-    placeItem = nil
-}
+Turtle.__index = Turtle
+local destructionLevels = {passive=true, safe=true, destructive=true}
+
+-- Turtle Constructor
+function Turtle.new()
+    local instance = setmetatable({}, Turtle)
+
+    -- Private variables
+    local pos
+    local waypoints = {}
+    local mineBlackList = {tags={}, names={}}
+    local mineWhiteList = {tags={}, names={}}
+
+    -- Private functions
+    local isSafeToMine = function()
+        block = turtle.inspect()
+    end
+
+    -- Initialise private variables
+    pos = instance:setPos(Position.new(0,0,0,'N'))
+    
+
+    print(textutils.serialise(instance))
+    return instance
+end
+
+-- Turtle Public Methods
+function Turtle:setPos(pos)
+    self.pos = pos
+end
+function Turtle:createWaypoint(name, pos)
+    self.waypoints[name] = pos
+end
+function Turtle:forward()
+    if (turtle.forward()) then
+        local direction = self.pos.getPos().direction
+        if direction == 'N' then
+           self.pos.setZ(self.pos.getPos().z - 1)
+        end
+    end
+end
+function Turtle:getPos()
+    return self.pos
+end
+
+
+local t = Turtle.new()
+t:forward()
+print(t:getPos())
+
+-- forward = nil,
+-- back = nil,
+-- up = nil,
+-- down = nil,
+-- right = nil,
+-- left = nil,
+-- gotoPos = nil,
+-- getPos = nil,
+-- getFuel = nil,
+-- setFuelPos = nil,
+-- getFuelPos = nil,
+-- refuel = nil,
+-- placeItem = nil
+-- waypoint 
 
