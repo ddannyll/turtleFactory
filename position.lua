@@ -20,61 +20,65 @@ end
 -------------------------------------------------------------------------------
 -- POSITION OBJECT
 -------------------------------------------------------------------------------
-Position = {}
-Position.__index = Position
-Position.__tostring = function (o)
-    return string.format("Position [x=%d, y=%d, z=%d, direction=%s]", self., pY, pZ, pDirection)
+
+positionMetatable = {}
+
+positionMetatable.__tostring = function(self)
+    return string.format('Position [x=%d, y=%d, z=%d, direction=%s]',
+        self.getX(), self.getY(), self.getZ(), self.getDirection())
 end
 
-
--- Position Constructor
-function Position.new(x, y, z, direction)
-    local instance = setmetatable({}, Position)
-    
-    -- Private Variables
-    local pX
-    local pY
-    local pZ
-    local pDirection
-
-
-
-    -- Position Public Methods
-    function instance:setX(v)
+function newPosition(x, y, z, direction)
+    local self = {}
+    local setX = function(v)
         assert (type(v) == "number")
-        pX = v
+        self.x = v
     end
-    function instance:setY(v)
-        assert (type(v) == 'number')
-        pY = v
+    local setY = function(v)
+        assert (type(v) == "number")
+        self.y = v
     end
-    function instance:setZ(v)
-        assert (type(v) == 'number')
-        pZ = v
+    local setZ = function(v)
+        assert (type(v) == "number")
+        self.z = v
     end
-    function instance:setDirection(v)
-        assert(type(v) == 'string' and DIRECTIONS[string.upper(string.sub(v,1,1))], 'Invalid Direction')
-        pDirection = string.upper(string.sub(v,1,1))
+    local setDirection = function(v)
+        assert(type(v) == 'string' and
+            DIRECTIONS[string.upper(string.sub(v,1,1))],
+            'Invalid Direction')
+        self.direction = string.upper(string.sub(v,1,1))
     end
-    function instance:getPos()
-        return {x=pX, y=pY, z=pZ, direction=pDirection}
+    local getX = function()
+        return self.x
     end
-    function instance:__tostring()
-        return 
+    local getY = function()
+        return self.y
     end
-    
+    local getZ = function()
+        return self.z
+    end
+    local getDirection = function()
+        return self.direction
+    end
+    setX(x)
+    setY(y)
+    setZ(z)
+    setDirection(direction)
 
-    -- Initialise private variables
-    instance:setX(x)
-    instance:setY(y)
-    instance:setZ(z)
-    instance:setDirection(direction)
+    instance = {
+        setX=setX,
+        setY=setY,
+        setZ=setZ,
+        setDirection = setDirection,
+        getX=getX,
+        getY=getY,
+        getZ=getZ,
+        getDirection = getDirection
+    }
 
-    return instance
+    return setmetatable(instance, positionMetatable)
 end
 
-p1 = Position.new(1,1,1,'n')
-p2 = Position.new(2,2,2, 's')
-print(p1.__tostring(p1))
 
--- i want to die this doesnt maek sense
+
+
