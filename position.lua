@@ -1,34 +1,18 @@
 local DIRECTIONS = {N=true, E=true, S=true, W=true}
 
 -------------------------------------------------------------------------------
--- HELPERS
--------------------------------------------------------------------------------
-
-function dump(o)
-    if type(o) == 'table' then
-       local s = '{ '
-       for k,v in pairs(o) do
-          if type(k) ~= 'number' then k = '"'..k..'"' end
-          s = s .. '['..k..'] = ' .. dump(v) .. ','
-       end
-       return s .. '} '
-    else
-       return tostring(o)
-    end
-end
-
--------------------------------------------------------------------------------
 -- POSITION OBJECT
 -------------------------------------------------------------------------------
 
-positionMetatable = {}
-
-positionMetatable.__tostring = function(self)
+local position = {}
+position.__index = position
+position.__tostring = function(self)
     return string.format('Position [x=%d, y=%d, z=%d, direction=%s]',
-        self.getX(), self.getY(), self.getZ(), self.getDirection())
+    self.getX(), self.getY(), self.getZ(), self.getDirection())
 end
 
-function newPosition(x, y, z, direction)
+
+function position.new(x, y, z, direction)
     local self = {}
     local setX = function(v)
         assert (type(v) == "number")
@@ -76,9 +60,9 @@ function newPosition(x, y, z, direction)
         getDirection = getDirection
     }
 
-    return setmetatable(instance, positionMetatable)
+    return setmetatable(instance, position)
 end
 
-
+return position
 
 

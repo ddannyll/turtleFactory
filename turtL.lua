@@ -1,4 +1,4 @@
-require('position.lua')
+Position = require('position.lua')
 
 -------------------------------------------------------------------------------
 -- TURTLE OBJECT
@@ -9,7 +9,7 @@ local destructionLevels = {passive=true, safe=true, destructive=true}
 
 -- Turtle Constructor
 function Turtle.new()
-    local instance = setmetatable({}, Turtle)
+    local self = {}
 
     -- Private variables
     local pos
@@ -20,6 +20,12 @@ function Turtle.new()
     -- Private functions
     local isSafeToMine = function()
         block = turtle.inspect()
+    end
+
+    -- Public functions
+    local setPos = function(v)
+        self.pos = v
+        
     end
 
     -- Initialise private variables
