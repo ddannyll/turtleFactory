@@ -9,9 +9,10 @@ local destructionLevels = {passive=true, safe=true, destructive=true}
 
 -- Turtle Constructor
 function Turtle.new()
-    local self = {}
+    self.waypoints = {}
+    self.mineBlackList = {}
 
-    -- Private variables
+
     local pos
     local waypoints = {}
     local mineBlackList = {tags={}, names={}}
@@ -25,7 +26,9 @@ function Turtle.new()
     -- Public functions
     local setPos = function(v)
         self.pos = v
-        
+    end
+    local createWaypoint = function (name, pos)
+
     end
 
     -- Initialise private variables

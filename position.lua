@@ -44,6 +44,9 @@ function position.new(x, y, z, direction)
     local getDirection = function()
         return self.direction
     end
+    local getPrimitive = function()
+        return {x=self.x, y=self.y, z=self.z, direction=self.direction}
+    end
     setX(x)
     setY(y)
     setZ(z)
@@ -57,7 +60,8 @@ function position.new(x, y, z, direction)
         getX=getX,
         getY=getY,
         getZ=getZ,
-        getDirection = getDirection
+        getDirection = getDirection,
+        getPrimitive=getPrimitive
     }
 
     return setmetatable(instance, position)
